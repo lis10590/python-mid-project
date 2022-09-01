@@ -1,4 +1,20 @@
-from connect_DB import *
+from connect_DB import books
+from classes import *
+
+
+lib = Library()
+s1 = Shelf()
+s1.add_book(books[0])
+s1.add_book(books[1])
+s2 = Shelf()
+s2.add_book(books[2])
+s2.add_book(books[3])
+s3 = Shelf()
+s3.add_book(books[4])
+s3.add_book(books[5])
+lib.shelves.append(s1)
+lib.shelves.append(s2)
+lib.shelves.append(s3)
 
 
 def menu():
@@ -20,21 +36,51 @@ option = int(input("Select the desired option from the menu"))
 
 while option != 11:
     if option == 1:
-        print("add book")
+        title = input("Enter a book title")
+        author = input("Enter the book's author")
+        num_of_pages = input("Enter the book's number of pages")
+        book = {
+            "title": title,
+            "author": author,
+            "num_of_pages": num_of_pages
+        }
+        lib.add_new_book(book)
+        for shelf in lib.shelves:
+            for book in shelf.books:
+                print(book)
     elif option == 2:
-        print("delete book")
+        title = input("Enter the book title you wish to delete")
+        lib.delete_book(title)
     elif option == 3:
-        print("change book location")
+        answer = input(
+            "Are the books you want to switch in the same shelf?(press y/n)")
+        if answer == "n":
+            title1 = input("Enter the first book's title")
+            title2 = input("Enter the second book's title")
+            lib.change_locations(title1, title2)
+        elif answer == "y":
+            shelf_num = input("Enter the shelf number")
+            location1 = input("Enter the first book's location in shelf")
+            location2 = input("Enter the second book's location in shelf")
+            lib.change_locations_in_same_shelf(shelf_num, location1, location2)
+
     elif option == 4:
-        print("register new reader")
+        name = input("Enter the new reader's name")
+        id = input("Enter the new reader's ID")
+        lib.register_reader(name, id)
     elif option == 5:
-        print("remove reader")
+        id = input("Enter the reader's ID you wish to remove")
+        lib.remove_reader(id)
     elif option == 6:
-        print("search book by author")
+        author = input("Enter the author's name for searching books")
+        lib.search_by_author(author)
     elif option == 7:
-        print("reading a book by a reader")
+        id = input("Enter the reader's ID for adding a book to his list")
+        title = input("Enter a book's title")
+        lib.reader_read_book(id, title)
     elif option == 8:
-        print("order all books")
+        lib.order_books()
+        print("books are ordered!")
     elif option == 9:
         print("save data")
     elif option == 10:
