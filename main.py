@@ -1,5 +1,8 @@
+import json
 from connect_DB import books
 from classes import *
+import os
+import sys
 
 
 lib = Library()
@@ -15,6 +18,8 @@ s3.add_book(books[5])
 lib.shelves.append(s1)
 lib.shelves.append(s2)
 lib.shelves.append(s3)
+
+
 
 
 def menu():
@@ -82,9 +87,35 @@ while option != 11:
         lib.order_books()
         print("books are ordered!")
     elif option == 9:
-        print("save data")
+        file_name = input("Enter a file name to be saved")
+        file_name_complete = file_name +".json"
+        library_dictionary = {}
+        shelves_arr = []
+        
+      
+
+        for shelf in lib.shelves:
+            shelves_dictionary = {}
+            shelves_dictionary["is_shelf_full"] = shelf.is_shelf_full
+            shelves_dictionary["books"] = shelf.books
+            shelves_arr.append(shelves_dictionary)
+        
+        for shelf in shelves_arr:
+            for item in shelf["books"]:
+                del item["_id"] 
+                  
+        library_dictionary["shelves"] = shelves_arr
+        print(list(library_dictionary.values())) 
+        with open(os.path.join(sys.path[0],file_name_complete),"w") as f:
+            data = json.dump(library_dictionary, f)   
+
+
+            
     elif option == 10:
-        print("load data")
+        file = input("Enter the file name you wish to load")
+        with open(os.path.join(sys.path[0],file),"r") as f:
+            data = json.load(f) 
+
     else:
         print("Invalid option")
 

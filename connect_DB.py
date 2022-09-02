@@ -1,4 +1,3 @@
-from pydoc import cli
 from pymongo import MongoClient
 from bson import ObjectId
 
